@@ -1,0 +1,11 @@
+import React from "react";
+
+const AccountsPage = () => {
+    return (
+        <div className="w-100 h-100">
+
+        </div>
+    )
+}
+
+export default AccountsPage;
