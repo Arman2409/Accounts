@@ -4,3 +4,9 @@ export interface Account {
     createdOn:Date,
     owner: string,
 }
+
+export interface AccountDetail {
+    property: string,
+
+    value: string,
+}

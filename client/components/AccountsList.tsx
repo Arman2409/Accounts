@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
-import axios, {AxiosResponse} from "axios";
-import {message, Table} from "antd";
+import {message, Table, Typography} from "antd";
+
+import styles from "../styles/accountsList.module.scss";
 import {Account} from "@/types/types";
 
-const AccountsList:React.FC = () => {
+const AccountsList: React.FC<any> = ({data}) => {
     const [accounts, setAccounts] = useState<Account[]>([]);
 
-    const columns:any[] = [
+    const columns: any[] = [
         {
             dataIndex: "id",
             title: "ID"
@@ -26,26 +27,34 @@ const AccountsList:React.FC = () => {
         },
         {
             title: "actions",
-            render: (account:any) => <Link href={`/accounts/${account.id}`}>
-                View
-            </Link>
+            render: (account: any) =>
+                <Link
+                    className={styles.accounts_link}
+                    href={`/accounts/${account.id}`}>
+                      View
+                </Link>
         }
     ]
 
     useEffect(() => {
-       axios.get(process.env.NEXT_PUBLIC_API_URL + "/accounts").then((resp: AxiosResponse) => {
-           setAccounts(resp.data.map((account: Account, index: number) => ({
-               ...account,
-               createdOn: account.createdOn.toString().slice(0, 10),
-           })))
-       }).catch((error) => {
-           message.error(error.message);
-       })
-    }, [])
+        setAccounts(data.map((account: Account, index: number) => ({
+            ...account,
+            createdOn: account.createdOn.toString().slice(0, 10),
+        })))
+    }, [data, setAccounts])
 
     return (
-        <div className={""}>
-           <Table
+        <div className={styles.accounts_cont}>
+            <Typography.Text mark type="secondary">
+                Accounts
+            </Typography.Text>
+            <Table
+                className={styles.accounts_list}
+                columns={columns}
+                dataSource={accounts}
+                rowKey="id"
+                bordered
+                pagination={false}
             />
         </div>
     )
