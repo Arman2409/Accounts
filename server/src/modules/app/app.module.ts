@@ -5,8 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [ConfigModule.forRoot(), AccountsModule, MongooseModule.forRoot(process.env.DATABASE_URL)],
-  controllers: [],
-  providers: [],
 })
 
 export class AppModule {}
