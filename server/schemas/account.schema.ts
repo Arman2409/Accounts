@@ -17,6 +17,9 @@ export class Account {
 
   @Prop({ required: true })
   createdOn: Date;
+
+  @Prop({ required: true })
+  updatedOn: Date;
 }
 
 export const AccountSchema = SchemaFactory.createForClass(Account);

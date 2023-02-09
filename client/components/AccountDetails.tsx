@@ -7,6 +7,12 @@ import accountsStyles from "../styles/accountsList.module.scss";
 import styles from "../styles/accountDetails.module.scss";
 import {AccountDetail} from "@/types/types";
 
+const convertCamelCase = (str: string) => {
+    return str.replace(/([A-Z])/g, ' $1')
+        .replace(/^./, function (str) {
+            return str.toUpperCase();
+        })
+}
 const AccountDetails: React.FC = () => {
     const [accountDetails, setAccountDetails] = useState<AccountDetail[]>([]);
     const router: NextRouter = useRouter();
@@ -26,7 +32,7 @@ const AccountDetails: React.FC = () => {
             const id: any = router.query.id;
             if (!Number(id)) {
                 message.error("Error Occured");
-                router.push("404");
+                router.push("/404");
                 return;
             }
             axios.get(process.env.NEXT_PUBLIC_API_URL + `/accounts/${id}`).then((resp: AxiosResponse) => {
@@ -36,10 +42,10 @@ const AccountDetails: React.FC = () => {
                     return;
                 }
                 const tableData: AccountDetail[] = Object.keys(resp.data[0]).flatMap((key: string) => {
-                        if(key.startsWith("_")) return [];
+                        if (key.startsWith("_")) return [];
                         return ({
-                            property: key,
-                            value: resp.data[0][key]
+                            property: convertCamelCase(key),
+                            value: key == "createdOn" || key == "updatedOn" ? resp.data[0][key].toString().slice(0, 10) : resp.data[0][key],
                         })
                     }
                 )
@@ -52,9 +58,12 @@ const AccountDetails: React.FC = () => {
 
     return (
         <div className={accountsStyles.accounts_cont}>
-            <Typography.Text mark type="secondary">
+            <Typography.Title
+                level={4}
+                mark
+                type="secondary">
                 Account Details
-            </Typography.Text>
+            </Typography.Title>
             <Table
                 className={styles.account_list}
                 bordered

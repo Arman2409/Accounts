@@ -6,7 +6,7 @@ import { AccountsService } from './accounts.service';
 export class AccountsController {
     constructor(private readonly service: AccountsService){};
 
-    @Get()
+    @Get("/")
     async getAccounts() {
         return await this.service.getAccounts();
     }

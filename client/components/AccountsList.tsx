@@ -26,12 +26,12 @@ const AccountsList: React.FC<any> = ({data}) => {
             title: "Owner"
         },
         {
-            title: "actions",
+            title: "Action",
             render: (account: any) =>
                 <Link
                     className={styles.accounts_link}
                     href={`/accounts/${account.id}`}>
-                      View
+                    View
                 </Link>
         }
     ]
@@ -40,14 +40,18 @@ const AccountsList: React.FC<any> = ({data}) => {
         setAccounts(data.map((account: Account, index: number) => ({
             ...account,
             createdOn: account.createdOn.toString().slice(0, 10),
+            updatedOn: account.updatedOn.toString().slice(0, 10),
         })))
     }, [data, setAccounts])
 
     return (
         <div className={styles.accounts_cont}>
-            <Typography.Text mark type="secondary">
+            <Typography.Title
+                level={4}
+                mark
+                type="secondary">
                 Accounts
-            </Typography.Text>
+            </Typography.Title>
             <Table
                 className={styles.accounts_list}
                 columns={columns}
