@@ -13,6 +13,6 @@ export class AccountsService {
     }
 
     async getSingleAccount(id: number):Promise<Account|any> {
-        return this.accountModel.find({id}); 
+        return this.accountModel.findOne({id});
     }
 }

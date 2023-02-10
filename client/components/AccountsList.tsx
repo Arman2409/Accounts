@@ -37,7 +37,11 @@ const AccountsList: React.FC<any> = ({data}) => {
     ]
 
     useEffect(() => {
-        setAccounts(data.map((account: Account, index: number) => ({
+        if (data.message) {
+            message.error(data.message);
+            return;
+        }
+        setAccounts(data.map((account: Account) => ({
             ...account,
             createdOn: account.createdOn.toString().slice(0, 10),
             updatedOn: account.updatedOn.toString().slice(0, 10),

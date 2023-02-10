@@ -5,7 +5,7 @@ import {NextRouter, useRouter} from "next/router"
 
 import accountsStyles from "../styles/accountsList.module.scss";
 import styles from "../styles/accountDetails.module.scss";
-import {AccountDetail} from "@/types/types";
+import {Account, AccountDetail} from "@/types/types";
 
 const convertCamelCase = (str: string) => {
     return str.replace(/([A-Z])/g, ' $1')
@@ -36,16 +36,16 @@ const AccountDetails: React.FC = () => {
                 return;
             }
             axios.get(process.env.NEXT_PUBLIC_API_URL + `/accounts/${id}`).then((resp: AxiosResponse) => {
-                if (resp.data.length === 0) {
+                if (!resp.data.id) {
                     message.error("Account Not Found");
                     router.push("/404");
                     return;
                 }
-                const tableData: AccountDetail[] = Object.keys(resp.data[0]).flatMap((key: string) => {
+                const tableData: AccountDetail[] = Object.keys(resp.data).flatMap((key: string) => {
                         if (key.startsWith("_")) return [];
                         return ({
                             property: convertCamelCase(key),
-                            value: key == "createdOn" || key == "updatedOn" ? resp.data[0][key].toString().slice(0, 10) : resp.data[0][key],
+                            value: key == "createdOn" || key == "updatedOn" ? resp.data[key].toString().slice(0, 10) : resp.data[key],
                         })
                     }
                 )
