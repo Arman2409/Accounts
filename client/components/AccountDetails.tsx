@@ -5,7 +5,7 @@ import {NextRouter, useRouter} from "next/router"
 
 import accountsStyles from "../styles/accountsList.module.scss";
 import styles from "../styles/accountDetails.module.scss";
-import {Account, AccountDetail} from "@/types/types";
+import { AccountDetail} from "@/types/types";
 
 const convertCamelCase = (str: string) => {
     return str.replace(/([A-Z])/g, ' $1')
@@ -15,6 +15,8 @@ const convertCamelCase = (str: string) => {
 }
 const AccountDetails: React.FC = () => {
     const [accountDetails, setAccountDetails] = useState<AccountDetail[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
     const router: NextRouter = useRouter();
 
     const columns: any[] = [
@@ -35,9 +37,11 @@ const AccountDetails: React.FC = () => {
                 router.push("/404");
                 return;
             }
+            setLoading(true);
             axios.get(process.env.NEXT_PUBLIC_API_URL + `/accounts/${id}`).then((resp: AxiosResponse) => {
                 if (!resp.data.id) {
                     message.error("Account Not Found");
+                    setLoading(false);
                     router.push("/404");
                     return;
                 }
@@ -50,7 +54,9 @@ const AccountDetails: React.FC = () => {
                     }
                 )
                 setAccountDetails(tableData);
+                setLoading(false);
             }).catch((error) => {
+                setLoading(false);
                 message.error(error.message);
             })
         }
@@ -67,6 +73,7 @@ const AccountDetails: React.FC = () => {
             <Table
                 className={styles.account_list}
                 bordered
+                loading={loading}
                 rowKey="property"
                 columns={columns}
                 pagination={false}

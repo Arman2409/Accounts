@@ -16,6 +16,14 @@ to install all necesary dependencies.
 2. Run command
 
 ```node
+npm run build
+```
+
+to build the project locally.
+
+3. Run command
+
+```node
 npm run dev
 ```
 
